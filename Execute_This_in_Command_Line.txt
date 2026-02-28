@@ -1,0 +1,15 @@
+conda activate root-cpp
+
+cd Documents/Codes/QED_Test
+
+g++ -I~/miniconda3/envs/root-cpp/include -o Simulation_Program_ROOT_Output PYTHIA_Generate_Events_ROOT.cc -lpythia8 $(root-config --cflags) -L~/miniconda3/envs/root-cpp/lib -std=c++20 $(root-config --glibs)
+
+./Simulation_Program_ROOT_Output
+
+g++ -I/home/user/miniconda3/envs/root-cpp/include -o Simulation_Program_HEPMC_Output PYTHIA_Generate_Events_HEPMC.cc -L/home/user/miniconda3/envs/root-cpp/lib -lHepMC3 -lpythia8 $(root-config --cflags) -std=c++20 $(root-config --glibs)
+
+./Simulation_Program_HEPMC_Output
+
+root -l yourfile.root -e "new TBrowser"
+
+ssh-add ~/github_ssh_key

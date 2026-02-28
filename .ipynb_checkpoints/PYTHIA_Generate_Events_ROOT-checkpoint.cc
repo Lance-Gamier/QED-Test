@@ -88,14 +88,8 @@ int main()
     pythia.readString("HardQCD::all = off");
     pythia.readString("WeakBosonExchange:all = on");
     pythia.readString("WeakZ0:gmZmode = 0");
-    // 1. Force the photon to be point-like (Direct)
-    pythia.readString("Photon:ProcessType = 1"); // 1 = Direct processes only
-    // 2. Disable the resolved hadronic components
-    pythia.readString("Photon:resolved = off");
-    // 3. Specifically enable Compton scattering (e gamma -> e gamma)
-    pythia.readString("PromptPhoton:qg2qgamma = on"); // Note: In ee/eg contexts, this maps to Compton
-    // OR use the specific electroweak flag:
-    // pythia.readString("WeakBosonExchange:ff2ff(t:gmZ) = on");
+    pythia.readString("PartonLevel:ISR = off");
+    pythia.readString("PartonLevel:FSR = off");
 
     Pythia8::Hist hpz("Momentum Distribution", 100, -10, 10);
 

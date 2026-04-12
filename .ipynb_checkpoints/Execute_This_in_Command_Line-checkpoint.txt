@@ -1,4 +1,9 @@
+-----------------------------------------------------------------------------------------------------------------------------------
+TO RUN ROOT, RUN THIS:
+
 conda activate root-cpp
+
+-----------------------------------------------------------------------------------------------------------------------------------
 
 cd Documents/Codes/QED_Test
 
@@ -12,4 +17,15 @@ g++ -I/home/user/miniconda3/envs/root-cpp/include -o Simulation_Program_HEPMC_Ou
 
 root -l yourfile.root -e "new TBrowser"
 
+-----------------------------------------------------------------------------------------------------------------------------------
+
+IF GITHUB AUTHORIZATION CREDENTALS ARE MISSING RUN THIS:
+
 ssh-add ~/github_ssh_key
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+IF INTERNET CONNECTION IS DOWN AND CAN'T PUSH TO GITHUB RUN THIS:
+
+sudo nmclie networking off
+sudo nmclie networking on

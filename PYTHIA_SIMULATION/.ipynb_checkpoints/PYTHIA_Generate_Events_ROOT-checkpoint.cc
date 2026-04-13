@@ -64,17 +64,23 @@ int main()
 
     // Declare variables for branches
     int id, event, size, no;
-    double m, px, py, pz;
+    double px1, py1, pz1;
+    double px2, py2, pz2;
+    double m1, m2;
 
     // Create branches in the tree
     tree->Branch("event", &event, "event/I");
     tree->Branch("size", &size, "size/I");
     tree->Branch("no", &no, "no/I");
     tree->Branch("id", &id, "id/I");
-    tree->Branch("m", &m, "m/D");
-    tree->Branch("px", &px, "px/D");
-    tree->Branch("py", &py, "py/D");
-    tree->Branch("pz", &pz, "pz/D");
+    tree->Branch("m1", &m1, "m1/D");
+    tree->Branch("px1", &px1, "px1/D");
+    tree->Branch("py1", &py1, "py1/D");
+    tree->Branch("pz1", &pz1, "pz1/D");
+    tree->Branch("m2", &m2, "m2/D");
+    tree->Branch("px2", &px2, "px2/D");
+    tree->Branch("py2", &py2, "py2/D");
+    tree->Branch("pz2", &pz2, "pz2/D");
 
     int nevents = 1e4;
 
@@ -95,31 +101,27 @@ int main()
 
     pythia.init();
 
-    // Loop over events
-    for(int i = 0; i < nevents; i++)
+    for(int i = 0; i < nevents; ++i)
     {
-        if(!pythia.next()) continue;  // Skip the event if it's not successful
-        int entries = pythia.event.size();  // Get the number of particles in the event
-        
-        event = i;
-        size = entries;
-
-        // Loop over particles in the event
-        for(int j = 0; j < entries; j++)
-        {
-            id = pythia.event[j].id();  // Fix: Get the particle ID, not mass
-
-            no = j;   // Particle index
-
-            m = pythia.event[j].m();   // Particle mass
-            px = pythia.event[j].px();  // Particle px
-            py = pythia.event[j].py();  // Particle py
-            pz = pythia.event[j].pz();  // Particle pz
-
-            hpz.fill(pz);  // Fill histogram with pz value
-        }
-
-        tree->Fill();  // Fill the tree with the current event's data
+        if (!pythia.next()) continue;
+    
+        int entries = pythia.event.size();
+    
+        if (entries < 2) continue;  // skip events with fewer than 2 particles
+    
+        // Particle 1
+        px1 = pythia.event[0].px();
+        py1 = pythia.event[0].py();
+        pz1 = pythia.event[0].pz();
+        m1  = pythia.event[0].m();
+    
+        // Particle 2
+        px2 = pythia.event[1].px();
+        py2 = pythia.event[1].py();
+        pz2 = pythia.event[1].pz();
+        m2  = pythia.event[1].m();
+    
+        tree->Fill();  // Each ROOT entry now has exactly 2 particles
     }
 
     // Write the tree to the ROOT file

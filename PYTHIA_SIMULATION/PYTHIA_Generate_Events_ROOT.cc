@@ -97,31 +97,38 @@ int main()
     pythia.readString("PartonLevel:ISR = off");
     pythia.readString("PartonLevel:FSR = off");
 
-    Pythia8::Hist hpz("Momentum Distribution", 100, -10, 10);
-
     pythia.init();
 
     for(int i = 0; i < nevents; ++i)
     {
         if (!pythia.next()) continue;
     
-        int entries = pythia.event.size();
+        // Create a vector to store the particles we actually want (the final state)
+        std::vector<int> finalParticles;
+        for (int j = 0; j < pythia.event.size(); ++j) {
+            if (pythia.event[j].isFinal()) {
+                finalParticles.push_back(j);
+            }
+        }
     
-        if (entries < 2) continue;  // skip events with fewer than 2 particles
+        // Ensure we found at least 2 final-state particles
+        if (finalParticles.size() < 2) continue;
     
-        // Particle 1
-        px1 = pythia.event[0].px();
-        py1 = pythia.event[0].py();
-        pz1 = pythia.event[0].pz();
-        m1  = pythia.event[0].m();
+        // Particle 1 (First scattered particle)
+        int idx1 = finalParticles[0];
+        px1 = pythia.event[idx1].px();
+        py1 = pythia.event[idx1].py();
+        pz1 = pythia.event[idx1].pz();
+        m1  = pythia.event[idx1].m();
     
-        // Particle 2
-        px2 = pythia.event[1].px();
-        py2 = pythia.event[1].py();
-        pz2 = pythia.event[1].pz();
-        m2  = pythia.event[1].m();
+        // Particle 2 (Second scattered particle)
+        int idx2 = finalParticles[1];
+        px2 = pythia.event[idx2].px();
+        py2 = pythia.event[idx2].py();
+        pz2 = pythia.event[idx2].pz();
+        m2  = pythia.event[idx2].m();
     
-        tree->Fill();  // Each ROOT entry now has exactly 2 particles
+        tree->Fill();
     }
 
     // Write the tree to the ROOT file
